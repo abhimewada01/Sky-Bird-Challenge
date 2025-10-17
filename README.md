@@ -1,43 +1,36 @@
-Sky Bird Challenge 🐦
-A simple and fun Flappy Bird style game 🐦 built with HTML5, CSS3, and JavaScript.
+# Sky Bird Challenge 🐦
 
-How to Run
+A simple and fun Flappy Bird style game built with HTML5, CSS3, and JavaScript.
+
+## Live Demo
+
+You can play the live version here: **https://abhimewada01.github.io/Sky-Bird-Challenge/**
+
+## How to Run
+
 This project requires no special installation. You can run it directly in any modern web browser.
 
-Download or Clone:
+1.  **Download the ZIP:** Download the project files.
+2.  **Open the Game:** Double-click the `index.html` file to open it in your browser.
 
-Download the project files as a ZIP and extract them, OR
+## Controls
 
-Clone the repository using Git: git clone https://github.com/abhimewada01/Sky-Bird-Challenge.git
+* **Jump:** `SPACE`, `UP ARROW`, or `ENTER`
+* **Fall Faster:** `DOWN ARROW`
+* **Brake:** `LEFT ARROW` (hold to slow down)
+* **Boost:** `RIGHT ARROW` (hold to speed up)
 
-Open the Game:
+## Technology & Assets Used
 
-Navigate to the project folder.
+* **Core Technologies:**
+    * **HTML5:** For the basic structure.
+    * **CSS3:** For styling the background and text.
+    * **JavaScript (ES6):** For all game logic on the HTML Canvas.
+* **Assets/Frameworks:**
+    * **Google Fonts:** The **Orbitron** font is used for on-screen text.
 
-Double-click the index.html file to open it in your web browser.
+## AI Usage
 
-You can also play the live version here: https://abhimewada01.github.io/Sky-Bird-Challenge/
-
-Controls
-The game is controlled using your keyboard.
-
-Jump: SPACE, UP ARROW, or ENTER
-
-Fall Faster: DOWN ARROW
-
-Brake: LEFT ARROW (hold to slow down)
-
-Boost: RIGHT ARROW (hold to speed up)
-
-Technology & Assets Used
-Core Technologies:
-
-HTML5: For the basic structure.
-
-CSS3: For styling the background and text.
-
-JavaScript (ES6): For all game logic and rendering on the HTML Canvas.
-
-Assets/Frameworks:
-
-Google Fonts: The Orbitron font is used for all on-screen text.
+I used **Google's Gemini** to assist in the development of this project. Here is how it was used:
+* **Debugging:** Helped identify and fix issues in collision logic and game state management.
+* **Code Refactoring:** Assisted in improving and cleaning up the JavaScript code.

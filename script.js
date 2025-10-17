@@ -7,7 +7,7 @@ canvas.height = window.innerHeight;
 let gameState = "start";
 let score = 0;
 let frame = 0;
-let showInstructions = 0;
+// showInstructions variable is removed as it's no longer needed.
 
 const normalSpeed = 3;
 const fastSpeed = 8;
@@ -41,7 +41,7 @@ for (let i = 0; i < 10; i++) {
 let obstacles = [];
 let traps = [];
 
-// --- Background (NEW: Sky Theme) ---
+// --- Background ---
 function drawBackground() {
   const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
   gradient.addColorStop(0, "#87CEEB"); // Light Sky Blue
@@ -101,10 +101,10 @@ function drawBird() {
   ctx.restore();
 }
 
-// --- Obstacles (NEW: Blue & White Theme) ---
+// --- Obstacles ---
 function drawObstacles() {
-  ctx.fillStyle = "rgba(255, 255, 255, 0.8)"; // Semi-transparent white
-  ctx.shadowColor = "#0077ff"; // Blue glow
+  ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+  ctx.shadowColor = "#0077ff";
   obstacles.forEach(obs => {
     ctx.shadowBlur = 20;
     ctx.fillRect(obs.x, 0, obs.w, obs.top);
@@ -113,10 +113,10 @@ function drawObstacles() {
   ctx.shadowBlur = 0;
 }
 
-// --- Traps (NEW: Blue & White Theme) ---
+// --- Traps ---
 function drawTraps() {
   traps.forEach(t => {
-    if (t.type === "fireball") { // Fireball color remains for clarity
+    if (t.type === "fireball") {
       const grad = ctx.createRadialGradient(t.x, t.y, 5, t.x, t.y, 15);
       grad.addColorStop(0, "#ffbb33");
       grad.addColorStop(1, "#ff5500");
@@ -127,9 +127,9 @@ function drawTraps() {
       ctx.arc(t.x, t.y, 12, 0, Math.PI * 2);
       ctx.fill();
     } else if (t.type === "spike") {
-      ctx.strokeStyle = "#ffffff"; // White spikes
+      ctx.strokeStyle = "#ffffff";
       ctx.lineWidth = 4;
-      ctx.shadowColor = "#0077ff"; // Blue glow
+      ctx.shadowColor = "#0077ff";
       ctx.shadowBlur = 15;
       ctx.beginPath();
       ctx.moveTo(t.x - 10, t.y + 10);
@@ -142,42 +142,21 @@ function drawTraps() {
   ctx.shadowBlur = 0;
 }
 
-// --- UI (NEW: Blue & White Theme) ---
+// --- UI (FIXED) ---
 function drawUI() {
   ctx.textAlign = "center";
-  
-  // Score - Dark blue text for readability
   ctx.fillStyle = "#003366";
-  ctx.shadowColor = '#ffffff'; // White glow for contrast
+  ctx.shadowColor = '#ffffff';
   ctx.shadowBlur = 10;
-  ctx.font = 'bold 70px "Orbitron"';
-  ctx.fillText(score, canvas.width / 2, 100);
 
   // Game state messages
   if (gameState === "start") {
+    // "Press SPACE to Start" message
     ctx.font = 'bold 50px "Orbitron"';
-    ctx.fillText("Press SPACE to Start", canvas.width / 2, canvas.height / 2);
-  } else if (gameState === "over") {
-    ctx.font = 'bold 80px "Orbitron"';
-    ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 50);
-    ctx.font = 'bold 50px "Orbitron"';
-    ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2 + 20);
-  }
+    ctx.fillText("Press SPACE to Start", canvas.width / 2, canvas.height / 2 - 80);
 
-  // Boost/Brake messages
-  if (message) {
-    ctx.font = 'bold 40px "Orbitron"';
-    ctx.fillStyle = message === "BOOST SPEED!" ? "#0077ff" : "#003366"; // Shades of blue
-    ctx.shadowColor = "#ffffff";
-    ctx.shadowBlur = 15;
-    ctx.fillText(message, canvas.width / 2, 160);
-  }
-
-  // Controls instructions
-  if (gameState === "playing" && showInstructions > 0) {
+    // Controls instructions
     ctx.font = '22px "Orbitron"';
-    ctx.fillStyle = "#003366"; // Dark blue text
-    ctx.shadowColor = '#ffffff';
     ctx.shadowBlur = 5;
     const texts = [
       "↑ UP / SPACE = Jump",
@@ -185,14 +164,35 @@ function drawUI() {
       "← LEFT = Brake",
       "→ RIGHT = Boost",
     ];
-    texts.forEach((t, i) => ctx.fillText(t, canvas.width / 2, canvas.height - 150 + i * 30));
-    showInstructions--;
+    texts.forEach((t, i) => ctx.fillText(t, canvas.width / 2, canvas.height / 2 + i * 35));
+
+  } else { // For both "playing" and "over" states
+    // Score
+    ctx.font = 'bold 70px "Orbitron"';
+    ctx.fillText(score, canvas.width / 2, 100);
+
+    // Game Over message
+    if (gameState === "over") {
+      ctx.font = 'bold 80px "Orbitron"';
+      ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2 - 50);
+      ctx.font = 'bold 50px "Orbitron"';
+      ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2 + 20);
+    }
   }
+
+  // Boost/Brake messages (only show while playing)
+  if (gameState === "playing" && message) {
+    ctx.font = 'bold 40px "Orbitron"';
+    ctx.fillStyle = message === "BOOST SPEED!" ? "#0077ff" : "#003366";
+    ctx.shadowColor = "#ffffff";
+    ctx.shadowBlur = 15;
+    ctx.fillText(message, canvas.width / 2, 160);
+  }
+
   ctx.shadowBlur = 0;
 }
 
-
-// --- Update Functions (No logical changes) ---
+// --- Update Functions ---
 function updateBird() {
   bird.velocity += bird.gravity;
   bird.y += bird.velocity;
@@ -225,15 +225,8 @@ function updateObstacles() {
     const top = Math.random() * (canvas.height - gap - 100) + 50;
     const bottom = canvas.height - top - gap;
     obstacles.push({
-      x: canvas.width,
-      w: 100,
-      top,
-      bottom,
-      baseTop: top,
-      baseBottom: bottom,
-      offset: Math.random() * 6,
-      speed: 0.03 + Math.random() * 0.03,
-      passed: false
+      x: canvas.width, w: 100, top, bottom, baseTop: top, baseBottom: bottom,
+      offset: Math.random() * 6, speed: 0.03 + Math.random() * 0.03, passed: false
     });
   }
 }
@@ -250,9 +243,7 @@ function updateTraps() {
   if (frame % 130 === 0) {
     const type = Math.random() > 0.5 ? "fireball" : "spike";
     traps.push({
-      type,
-      x: canvas.width + 50,
-      y: Math.random() * (canvas.height - 100) + 50,
+      type, x: canvas.width + 50, y: Math.random() * (canvas.height - 100) + 50,
       offset: Math.random() * Math.PI * 2
     });
   }
@@ -300,8 +291,7 @@ function handleKeyDown(e) {
       messageTimer = 60;
     }
   } else if (gameState === "over") {
-    // Any key press on game over screen will reset it
-    gameState = "start"; // Go back to start screen
+    gameState = "start";
   }
 }
 
@@ -327,7 +317,7 @@ function resetGame() {
   bird.y = canvas.height / 2;
   bird.velocity = 0;
   scrollSpeed = normalSpeed;
-  showInstructions = 200; // Show instructions for a few seconds
+  // showInstructions is removed from here too
   gameState = "playing";
 }
 
